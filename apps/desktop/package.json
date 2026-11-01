@@ -1,0 +1,20 @@
+{
+  "name": "normal-browser-desktop",
+  "version": "0.5.0",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json && vite build",
+    "dev": "vite"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.4.0",
+    "vite": "^5.4.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "electron": "30.5.1"
+  },
+  "description": "A normal web browser",
+  "author": "Normal Browser"
+}

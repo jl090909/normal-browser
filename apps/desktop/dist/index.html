@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Normal Browser</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; display: flex; flex-direction: column; height: 100vh; background: #1a1a2e; color: #eee; }
+  .toolbar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: #16213e; border-bottom: 1px solid #0f3460; }
+  .toolbar button { background: #0f3460; color: #eee; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 14px; }
+  .toolbar button:hover { background: #1a4a8a; }
+  .toolbar input { flex: 1; padding: 6px 12px; border: 1px solid #0f3460; border-radius: 4px; background: #1a1a2e; color: #eee; font-size: 14px; outline: none; }
+  .toolbar input:focus { border-color: #e94560; }
+  webview { flex: 1; width: 100%; border: none; }
+  .status { padding: 2px 12px; font-size: 11px; color: #888; background: #16213e; }
+</style>
+</head>
+<body>
+  <div class="toolbar">
+    <button id="back" title="Back">&#9664;</button>
+    <button id="fwd" title="Forward">&#9654;</button>
+    <button id="reload" title="Reload">&#8635;</button>
+    <button id="home" title="Home">&#8962;</button>
+    <input id="url" type="text" placeholder="Enter URL or search..." />
+    <button id="go">Go</button>
+  </div>
+  <webview id="wv" src="https://www.google.com" allowpopups></webview>
+  <div class="status" id="status">Ready</div>
+  <script>
+    const wv = document.getElementById('wv');
+    const urlInput = document.getElementById('url');
+    const status = document.getElementById('status');
+    function navigate(u) {
+      if (!/^https?:\/\//i.test(u) && !/^file:\/\//i.test(u)) {
+        u = 'https://www.google.com/search?q=' + encodeURIComponent(u);
+      }
+      wv.src = u;
+      urlInput.value = u;
+    }
+    document.getElementById('go').onclick = () => navigate(urlInput.value.trim());
+    urlInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') navigate(urlInput.value.trim()); });
+    document.getElementById('back').onclick = () => wv.goBack();
+    document.getElementById('fwd').onclick = () => wv.goForward();
+    document.getElementById('reload').onclick = () => wv.reload();
+    document.getElementById('home').onclick = () => navigate('https://www.google.com');
+    wv.addEventListener('did-navigate', (e) => { urlInput.value = e.url; status.textContent = e.url; });
+    wv.addEventListener('did-fail-load', (e) => { status.textContent = 'Failed to load: ' + e.errorDescription; });
+    wv.addEventListener('page-title-updated', (e) => { document.title = e.title + ' - Normal Browser'; });
+  </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+appId: com.normalbrowser.app
+productName: Normal Browser
+directories:
+  output: dist_electron
+  buildResources: build
+files:
+  - dist/**/*
+win:
+  target:
+    - nsis
+    - portable
+  icon: build/icon.ico
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
