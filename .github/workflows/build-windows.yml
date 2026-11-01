@@ -1,0 +1,23 @@
+name: Build Windows
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: cd apps/desktop && npm install
+      - run: cd apps/desktop && npx electron-builder --win
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v0.5.0
+          name: Normal Browser v0.5.0
+          files: |
+            apps/desktop/dist_electron/*.exe
+            apps/desktop/dist_electron/*.7z
+            apps/desktop/dist_electron/checksums.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
